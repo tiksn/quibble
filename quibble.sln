@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29025.244
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "quibble", "quibble\quibble.csproj", "{5136757A-61A4-4B1D-B36B-5B19360AA398}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "quibble.domain", "quibble.domain\quibble.domain.csproj", "{49155013-FD00-478F-ADF7-78F98424109E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5136757A-61A4-4B1D-B36B-5B19360AA398}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5136757A-61A4-4B1D-B36B-5B19360AA398}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5136757A-61A4-4B1D-B36B-5B19360AA398}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5136757A-61A4-4B1D-B36B-5B19360AA398}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49155013-FD00-478F-ADF7-78F98424109E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49155013-FD00-478F-ADF7-78F98424109E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49155013-FD00-478F-ADF7-78F98424109E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49155013-FD00-478F-ADF7-78F98424109E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {732E748A-66FC-4578-B725-5D7C2DD66AD3}
+	EndGlobalSection
+EndGlobal
