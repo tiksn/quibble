@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "quibble.domain", "quibble.d
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "quibble.persistence", "quibble.persistence\quibble.persistence.csproj", "{759BEDF5-2EC8-4BDE-9B2F-FF90D27CE10C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "quibble.infrastructure", "quibble.infrastructure\quibble.infrastructure.csproj", "{402AFE35-2911-41DE-8211-8A8F1462030C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{759BEDF5-2EC8-4BDE-9B2F-FF90D27CE10C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{759BEDF5-2EC8-4BDE-9B2F-FF90D27CE10C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{759BEDF5-2EC8-4BDE-9B2F-FF90D27CE10C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{402AFE35-2911-41DE-8211-8A8F1462030C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{402AFE35-2911-41DE-8211-8A8F1462030C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{402AFE35-2911-41DE-8211-8A8F1462030C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{402AFE35-2911-41DE-8211-8A8F1462030C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
