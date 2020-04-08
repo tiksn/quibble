@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>TIKSN.quibble.domain</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TIKSN-Framework" Version="3.2.0-alpha" />
+    <PackageReference Include="TIKSN-Framework" Version="3.2.0-alpha.27" />
   </ItemGroup>
 
 </Project>
