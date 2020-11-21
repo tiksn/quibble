@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>TIKSN-quibble-932A713E-F4A4-4A2D-B4AF-C26AF19FD039</UserSecretsId>
     <RootNamespace>TIKSN.quibble</RootNamespace>
   </PropertyGroup>
