@@ -1,3 +1,5 @@
+#Requires -Module Microsoft.Graph
+
 [CmdletBinding()]
 param (
 )
