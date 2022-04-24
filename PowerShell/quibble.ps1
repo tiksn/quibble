@@ -81,8 +81,6 @@ try {
 
     foreach ($msList in $msLists) {
         if ($msList.IsOwner -and ($msList.WellknownListName -eq 'none')) {
-            $msList.DisplayName
-
             foreach ($hTag in $hTags) {
                 if ($msList.DisplayName.Contains($hTag.name)) {
                     $associations += [PSCustomObject]@{
