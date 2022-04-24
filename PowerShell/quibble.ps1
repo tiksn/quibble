@@ -79,6 +79,7 @@ try {
 
     $hTags = Get-HabiticaTag
     $hTodos = Get-HabiticaTask -Type todos
+    $hCompletedTodos = Get-HabiticaTask -Type completedTodos
 
     $associations = @()
 
@@ -112,7 +113,16 @@ try {
                     }
                 }
                 elseif ($msTodoListTask.Status -eq 'notStarted') {
-                    # $msTodoListTask.Title
+                    $hTodo = $hTodos | Where-Object { $PSItem.text -eq $msTodoListTask.Title }
+                    $hCompletedTodo = $hCompletedTodos | Where-Object { $PSItem.text -eq $msTodoListTask.Title }
+                    if ((-not $hTodo) -and (-not $hCompletedTodo)) {
+                        if ($PSCmdlet.ShouldProcess(
+                                "Habitica To-Do '$($msTodoListTask.Title)' will be created",
+                                $msTodoListTask.Title,
+                                'Complete')) {
+                            New-HabiticaTask -Type todo -Tags $association.HabiticaTag.id -Text $msTodoListTask.Title -Notes $msTodoListTask.Body.Content
+                        }
+                    }
                 }
             }
         }
