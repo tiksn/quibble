@@ -62,7 +62,13 @@ try {
     Write-Information "Microsoft Graph user is $($mgUser.DisplayName)"
 
     $habiticaCredentialsFilePath = Join-Path -Path $HOME -ChildPath 'HabiticaCredentials'
-    Connect-Habitica -Path $habiticaCredentialsFilePath
+    $habiticaCredentialsFileExists = Test-Path -Path $habiticaCredentialsFilePath
+    if ($habiticaCredentialsFileExists) {
+        Connect-Habitica -Path $habiticaCredentialsFilePath
+    }
+    else {
+        Connect-Habitica -Path $habiticaCredentialsFilePath -Save
+    }
 
     $hUser = Get-HabiticaUser
     Write-Information "Habitica user is $($hUser.profile.name)"
