@@ -49,7 +49,9 @@
  Synchronize Microsoft To Do tasks and Habitica todos 
 
 #> 
-[CmdletBinding()]
+[CmdletBinding(
+    SupportsShouldProcess = $true,
+    ConfirmImpact = 'Low')]
 param (
 )
 
@@ -97,12 +99,20 @@ try {
         $msTodoListTasks = Get-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id
         foreach ($msTodoListTask in $msTodoListTasks) {
             if (-not $msTodoListTask.Recurrence.Pattern.Type) {
-                foreach ($hTodo in $hTodos) {
-                    if ($hTodo.text -eq $msTodoListTask.Title) {
-                        if ($msTodoListTask.Status -eq 'completed') {
-                            $hTodo | Complete-HabiticaTask
+                if ($msTodoListTask.Status -eq 'completed') {
+                    foreach ($hTodo in $hTodos) {
+                        if ($hTodo.text -eq $msTodoListTask.Title) {
+                            if ($PSCmdlet.ShouldProcess(
+                                    "Habitica To-Do '$($hTodo.text)' will be completed",
+                                    $hTodo.text,
+                                    'Complete')) {
+                                $hTodo | Complete-HabiticaTask
+                            }
                         }
                     }
+                }
+                elseif ($msTodoListTask.Status -eq 'notStarted') {
+                    # $msTodoListTask.Title
                 }
             }
         }
