@@ -73,7 +73,28 @@ try {
     $hUser = Get-HabiticaUser
     Write-Information "Habitica user is $($hUser.profile.name)"
 
-    Get-MgUserTodoList -UserId $mgUser.Id -All
+    $mgLists = Get-MgUserTodoList -UserId $mgUser.Id -All
+
+    $hTags = Get-HabiticaTag
+
+    $associations = @()
+
+    foreach ($mgList in $mgLists) {
+        if ($mgList.IsOwner -and ($mgList.WellknownListName -eq 'none')) {
+            $mgList.DisplayName
+
+            foreach ($hTag in $hTags) {
+                if ($mgList.DisplayName.Contains($hTag.name)) {
+                    $associations += [PSCustomObject]@{
+                        MsTodoList  = $mgList
+                        HabiticaTag = $hTag
+                    }
+                }
+            }
+        }
+    }
+
+    $associations
 }
 catch {
     throw $_
