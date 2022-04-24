@@ -49,7 +49,7 @@
  Synchronize Microsoft To Do tasks and Habitica todos 
 
 #> 
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess = $true)]
 param (
 )
 
