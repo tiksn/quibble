@@ -76,6 +76,7 @@ try {
     $msLists = Get-MgUserTodoList -UserId $mgUser.Id -All
 
     $hTags = Get-HabiticaTag
+    $hTodos = Get-HabiticaTask -Type todos
 
     $associations = @()
 
@@ -96,7 +97,11 @@ try {
         $msTodoListTasks = Get-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id
         foreach ($msTodoListTask in $msTodoListTasks) {
             if (-not $msTodoListTask.Recurrence.Pattern.Type) {
-                $msTodoListTask.Title
+                foreach ($hTodo in $hTodos) {
+                    if ($hTodo.text -eq $msTodoListTask.Title) {
+                        $msTodoListTask.Title
+                    }
+                }
             }
         }
     }
