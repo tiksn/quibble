@@ -99,7 +99,9 @@ try {
             if (-not $msTodoListTask.Recurrence.Pattern.Type) {
                 foreach ($hTodo in $hTodos) {
                     if ($hTodo.text -eq $msTodoListTask.Title) {
-                        $msTodoListTask.Title
+                        if ($msTodoListTask.Status -eq 'completed') {
+                            $hTodo | Complete-HabiticaTask
+                        }
                     }
                 }
             }
