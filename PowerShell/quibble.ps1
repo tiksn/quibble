@@ -73,20 +73,19 @@ try {
     $hUser = Get-HabiticaUser
     Write-Information "Habitica user is $($hUser.profile.name)"
 
-    $mgLists = Get-MgUserTodoList -UserId $mgUser.Id -All
+    $msLists = Get-MgUserTodoList -UserId $mgUser.Id -All
 
     $hTags = Get-HabiticaTag
+    $hTodos = Get-HabiticaTask -Type todos
 
     $associations = @()
 
-    foreach ($mgList in $mgLists) {
-        if ($mgList.IsOwner -and ($mgList.WellknownListName -eq 'none')) {
-            $mgList.DisplayName
-
+    foreach ($msList in $msLists) {
+        if ($msList.IsOwner -and ($msList.WellknownListName -eq 'none')) {
             foreach ($hTag in $hTags) {
-                if ($mgList.DisplayName.Contains($hTag.name)) {
+                if ($msList.DisplayName.Contains($hTag.name)) {
                     $associations += [PSCustomObject]@{
-                        MsTodoList  = $mgList
+                        MsTodoList  = $msList
                         HabiticaTag = $hTag
                     }
                 }
@@ -94,7 +93,18 @@ try {
         }
     }
 
-    $associations
+    foreach ($association in $associations) {
+        $msTodoListTasks = Get-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id
+        foreach ($msTodoListTask in $msTodoListTasks) {
+            if (-not $msTodoListTask.Recurrence.Pattern.Type) {
+                foreach ($hTodo in $hTodos) {
+                    if ($hTodo.text -eq $msTodoListTask.Title) {
+                        $msTodoListTask.Title
+                    }
+                }
+            }
+        }
+    }
 }
 catch {
     throw $_
