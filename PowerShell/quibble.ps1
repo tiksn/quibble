@@ -1,5 +1,54 @@
-#Requires -Module Microsoft.Graph
 
+<#PSScriptInfo
+
+.VERSION 1.0.0
+
+.GUID 9b7358ea-945f-401d-a211-fe02d722d1a5
+
+.AUTHOR Tigran TIKSN Torosyan
+
+.COMPANYNAME TIKSN Lab
+
+.COPYRIGHT Tigran TIKSN Torosyan
+
+.TAGS
+
+.LICENSEURI https://github.com/tiksn/quibble/blob/develop/LICENSE
+
+.PROJECTURI https://github.com/tiksn/quibble
+
+.ICONURI
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS
+
+.EXTERNALSCRIPTDEPENDENCIES
+
+.RELEASENOTES
+
+
+.PRIVATEDATA
+
+#> 
+
+#Requires -Module Microsoft.Graph
+#Requires -Module Habitica
+
+
+
+
+
+
+
+
+
+<# 
+
+.DESCRIPTION 
+ Synchronize Microsoft To Do tasks and Habitica todos 
+
+#> 
 [CmdletBinding()]
 param (
 )
