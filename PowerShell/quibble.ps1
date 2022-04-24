@@ -97,12 +97,15 @@ try {
         $msTodoListTasks = Get-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id
         foreach ($msTodoListTask in $msTodoListTasks) {
             if (-not $msTodoListTask.Recurrence.Pattern.Type) {
-                foreach ($hTodo in $hTodos) {
-                    if ($hTodo.text -eq $msTodoListTask.Title) {
-                        if ($msTodoListTask.Status -eq 'completed') {
+                if ($msTodoListTask.Status -eq 'completed') {
+                    foreach ($hTodo in $hTodos) {
+                        if ($hTodo.text -eq $msTodoListTask.Title) {
                             $hTodo | Complete-HabiticaTask
                         }
                     }
+                }
+                elseif ($msTodoListTask.Status -eq 'notStarted') {
+                    # $msTodoListTask.Title
                 }
             }
         }
