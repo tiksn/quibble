@@ -120,7 +120,7 @@ try {
                         if ($PSCmdlet.ShouldProcess(
                                 "Habitica To-Do '$($msTodoListTaskTitle)' will be created",
                                 $msTodoListTaskTitle,
-                                'Complete')) {
+                                'Create')) {
                             New-HabiticaTask -Type todo -Tags $association.HabiticaTag.id -Text $msTodoListTaskTitle -Notes $msTodoListTask.Body.Content
                         }
                     }
