@@ -113,7 +113,13 @@ try {
                     }
                 }
                 elseif ($msTodoListTask.Status -eq 'notStarted') {
-                    $msTodoListTaskTitle = $msTodoListTask.Title.Replace("’", "'")
+                    $msTodoListTaskTitle = $msTodoListTask.Title.Normalize([System.Text.NormalizationForm]::FormD)
+                    $msTodoListTaskTitle = $msTodoListTaskTitle.Replace("’", "'")
+                    $uni = [System.Text.Encoding]::Unicode.GetBytes($msTodoListTaskTitle)
+                    $ascii = [System.Text.Encoding]::ASCII.GetString($uni)
+                    $msTodoListTaskTitle = $ascii.Normalize([System.Text.NormalizationForm]::FormD)
+                    $msTodoListTaskTitle = $msTodoListTaskTitle.Replace("$([char]0x0000)", '')
+                    $msTodoListTaskTitle = $msTodoListTaskTitle.Replace("", "")
                     $hTodo = $hTodos | Where-Object { $PSItem.text -eq $msTodoListTaskTitle }
                     $hCompletedTodo = $hCompletedTodos | Where-Object { $PSItem.text -eq $msTodoListTaskTitle }
                     if ((-not $hTodo) -and (-not $hCompletedTodo)) {
