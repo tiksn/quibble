@@ -59,7 +59,7 @@ try {
     Import-Module -Name Microsoft.Graph
     Import-Module -Name Habitica
 
-    Connect-Graph -Scopes @('Tasks.Read', 'Tasks.ReadWrite')
+    Connect-Graph -Scopes @('User.Read','Tasks.Read', 'Tasks.ReadWrite')
     $mgUser = Get-MgUser
     Write-Information "Microsoft Graph user is $($mgUser.DisplayName)"
 
