@@ -26,7 +26,9 @@
 	# Modules that must be imported into the global environment prior to importing
 	# this module
 	RequiredModules   = @(
-		@{ ModuleName = 'PSFramework'; ModuleVersion = '1.7.249' }
+		@{ ModuleName = 'PSFramework'; ModuleVersion = '1.7.249' },
+		@{ ModuleName = 'Microsoft.Graph'; ModuleVersion = '1.13.0' },
+		@{ ModuleName = 'Habitica'; ModuleVersion = '1.2.0' }
 	)
 	
 	# Assemblies that must be loaded prior to importing this module
