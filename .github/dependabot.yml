@@ -1,7 +1,7 @@
 version: 2
 updates:
-- package-ecosystem: nuget
-  directory: "/"
+- package-ecosystem: docker
+  directory: "/.devcontainer"
   schedule:
     interval: daily
     time: "03:00"
