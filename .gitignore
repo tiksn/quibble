@@ -1,22 +1,39 @@
-﻿
-# ignore the settings folder and files for VSCode and PSS
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,powershell
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,powershell
+
+### PowerShell ###
+# Exclude packaged modules
+*.zip
+
+# Exclude .NET assemblies from source
+*.dll
+
+### VisualStudioCode ###
 .vscode/*
-*.psproj
-*TempPoint*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
 
-# Ignore staging info from Visual Studio
-library/quibble/.vs/*
-library/quibble/quibble/bin/*
-library/quibble/quibble/obj/*
+# Local History for Visual Studio Code
+.history/
 
-# ignore PowerShell Studio MetaData
-quibble/quibble.psproj
-quibble/quibble.psproj.bak
-quibble/quibble.psprojs
-quibble/quibble.psproj
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,powershell
 
 # ignore the TestResults
 TestResults/*
 
 # ignore the publishing Directory
 publish/*
+
+# Project Specific
+.trash
