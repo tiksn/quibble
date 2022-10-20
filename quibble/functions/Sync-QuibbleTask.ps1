@@ -2,10 +2,10 @@
 function Sync-QuibbleTask {
 <#
     .SYNOPSIS
-        Synchronize Microsoft To-Dos and Habitica To-Dos
+        Synchronize Microsoft To Do tasks and Habitica todos
 
     .DESCRIPTION
-        Synchronize Microsoft To-Dos and Habitica To-Dos
+        Synchronize Microsoft To Do tasks and Habitica todos
 
     .PARAMETER Confirm
 		Confirm to proceed synchronization
