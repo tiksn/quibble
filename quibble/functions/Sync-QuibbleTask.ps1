@@ -1,5 +1,28 @@
 ﻿
 function Sync-QuibbleTask {
+<#
+    .SYNOPSIS
+        Synchronize Microsoft To-Dos and Habitica To-Dos
+
+    .DESCRIPTION
+        Synchronize Microsoft To-Dos and Habitica To-Dos
+
+    .PARAMETER Confirm
+		Confirm to proceed synchronization
+
+    .PARAMETER WhatIf
+		Dry-Run the synchronization
+
+    .NOTES
+
+    .LINK
+        https://github.com/tiksn/quibble
+
+    .EXAMPLE
+        Sync-QuibbleTask -Verbose
+
+        Synchronize all to-dos
+#>
     [CmdletBinding(
         SupportsShouldProcess = $true,
         ConfirmImpact = 'Low'
@@ -8,7 +31,7 @@ function Sync-QuibbleTask {
     )
     
     try {
-        Connect-Graph -Scopes @('User.Read','Tasks.Read', 'Tasks.ReadWrite')
+        Connect-Graph -Scopes @('User.Read', 'Tasks.Read', 'Tasks.ReadWrite')
         $mgUser = Get-MgUser
         Write-Information "Microsoft Graph user is $($mgUser.DisplayName)"
     
@@ -68,7 +91,7 @@ function Sync-QuibbleTask {
                         $ascii = [System.Text.Encoding]::ASCII.GetString($uni)
                         $msTodoListTaskTitle = $ascii.Normalize([System.Text.NormalizationForm]::FormD)
                         $msTodoListTaskTitle = $msTodoListTaskTitle.Replace("$([char]0x0000)", '')
-                        $msTodoListTaskTitle = $msTodoListTaskTitle.Replace("", "")
+                        $msTodoListTaskTitle = $msTodoListTaskTitle.Replace('', "")
                         $hTodo = $hTodos | Where-Object { $PSItem.text -eq $msTodoListTaskTitle }
                         $hCompletedTodo = $hCompletedTodos | Where-Object { $PSItem.text -eq $msTodoListTaskTitle }
                         if ((-not $hTodo) -and (-not $hCompletedTodo)) {
