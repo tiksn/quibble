@@ -31,7 +31,7 @@ function Sync-QuibbleTask {
     )
     
     try {
-        Connect-Graph -Scopes @('User.Read', 'Tasks.Read', 'Tasks.ReadWrite')
+        Connect-MgGraph -Scopes @('User.Read', 'Tasks.Read', 'Tasks.ReadWrite')
         $mgUser = Get-MgUser
         Write-Information "Microsoft Graph user is $($mgUser.DisplayName)"
     
@@ -91,7 +91,7 @@ function Sync-QuibbleTask {
                         $ascii = [System.Text.Encoding]::ASCII.GetString($uni)
                         $msTodoListTaskTitle = $ascii.Normalize([System.Text.NormalizationForm]::FormD)
                         $msTodoListTaskTitle = $msTodoListTaskTitle.Replace("$([char]0x0000)", '')
-                        $msTodoListTaskTitle = $msTodoListTaskTitle.Replace('', "")
+                        $msTodoListTaskTitle = $msTodoListTaskTitle.Replace('', '')
                         $hTodo = $hTodos | Where-Object { $PSItem.text -eq $msTodoListTaskTitle }
                         $hCompletedTodo = $hCompletedTodos | Where-Object { $PSItem.text -eq $msTodoListTaskTitle }
                         if ((-not $hTodo) -and (-not $hCompletedTodo)) {
