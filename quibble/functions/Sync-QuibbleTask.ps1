@@ -1,5 +1,5 @@
-
-function Sync-QuibbleTasks {
+﻿
+function Sync-QuibbleTask {
     [CmdletBinding(
         SupportsShouldProcess = $true,
         ConfirmImpact = 'Low'
