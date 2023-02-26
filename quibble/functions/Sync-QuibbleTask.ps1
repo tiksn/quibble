@@ -31,21 +31,25 @@ function Sync-QuibbleTask {
     )
     
     try {
-        Connect-MgGraph -Scopes @('User.Read', 'Tasks.Read', 'Tasks.ReadWrite')
-        $mgUser = Get-MgUser
-        Write-Information "Microsoft Graph user is $($mgUser.DisplayName)"
-    
-        $habiticaCredentialsFilePath = Join-Path -Path $HOME -ChildPath 'HabiticaCredentials'
-        $habiticaCredentialsFileExists = Test-Path -Path $habiticaCredentialsFilePath
-        if ($habiticaCredentialsFileExists) {
-            Connect-Habitica -Path $habiticaCredentialsFilePath
+        $habiticaCredentialSecretName = Get-PSFConfigValue -FullName quibble.Secrets.HabiticaCredentialSecretName -NotNull
+        [pscredential]$habiticaCredential = Get-Secret -Name $habiticaCredentialSecretName
+        if ($null -eq $habiticaCredential) {
+            throw 'Habitica Credential is null'
         }
-        else {
-            Connect-Habitica -Path $habiticaCredentialsFilePath -Save
+        if ($IsLinux -or $IsMacOS) {
+            $habiticaCredentialPlain = [PSCustomObject] @{
+                UserName = $habiticaCredential.UserName
+                Password = $habiticaCredential.GetNetworkCredential().Password
+            }
+            [PSCustomObject]$habiticaCredential = $habiticaCredentialPlain
         }
-    
+        Connect-Habitica -Credential $habiticaCredential
         $hUser = Get-HabiticaUser
         Write-Information "Habitica user is $($hUser.profile.name)"
+
+        Connect-MgGraph -Scopes @('User.Read', 'Tasks.Read', 'Tasks.ReadWrite')
+        $mgUser = Get-MgUser
+        Write-Information "Microsoft Graph user is $($mgUser.DisplayName)"   
     
         $msLists = Get-MgUserTodoList -UserId $mgUser.Id -All
     
