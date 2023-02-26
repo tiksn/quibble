@@ -1,7 +1,7 @@
-Describe "Test Sync-QuibbleTask.ps1" {
-    Context "Sample context" {
-        $name = 'name'
-        It "[$name] Sample Test" {
+Describe 'Test Sync-QuibbleTask.ps1' {
+    Context 'Sync' {
+        It 'Sync Task' {
+            Sync-QuibbleTask
         }
     }
 }
