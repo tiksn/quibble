@@ -26,10 +26,11 @@
 	# Modules that must be imported into the global environment prior to importing
 	# this module
 	RequiredModules   = @(
-		@{ ModuleName = 'PSFramework'; ModuleVersion = '1.7.249' },
-		@{ ModuleName = 'Microsoft.Graph.Authentication'; ModuleVersion = '1.13.0' },
-		@{ ModuleName = 'Microsoft.Graph.Users'; ModuleVersion = '1.13.0' },
-		@{ ModuleName = 'Habitica'; ModuleVersion = '1.2.0' }
+		@{ ModuleName = 'PSFramework'; RequiredVersion = '1.7.270' },
+		@{ ModuleName = 'Microsoft.Graph.Authentication'; RequiredVersion = '1.22.0' },
+		@{ ModuleName = 'Microsoft.Graph.Users'; RequiredVersion = '1.22.0' },
+		@{ ModuleName = 'Microsoft.PowerShell.SecretManagement'; RequiredVersion = '1.1.2' },
+		@{ ModuleName = 'Habitica'; RequiredVersion = '1.2.0' }
 	)
 	
 	# Assemblies that must be loaded prior to importing this module
