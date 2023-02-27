@@ -81,11 +81,13 @@ function Sync-QuibbleTask {
                     if ($msTodoListTask.Status -eq 'completed') {
                         foreach ($hTodo in $hTodos) {
                             if ($hTodo.text -eq $msTodoListTask.Title) {
+                                Write-PSFMessage -Level SomewhatVerbose -Message "Habitica To-Do '$($hTodo.text)' will be completed"
                                 if ($PSCmdlet.ShouldProcess(
                                         "Habitica To-Do '$($hTodo.text)' will be completed",
                                         $hTodo.text,
                                         'Complete')) {
                                     $hTodo | Complete-HabiticaTask
+                                    Write-PSFMessage -Level SomewhatVerbose -Message "Habitica To-Do '$($hTodo.text)' completed"
                                 }
                             }
                         }
