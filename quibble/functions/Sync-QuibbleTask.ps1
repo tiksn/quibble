@@ -10,6 +10,9 @@ function Sync-QuibbleTask {
     .PARAMETER Confirm
 		Confirm to proceed synchronization
 
+    .PARAMETER Bidirectional
+        Synchronize Microsoft To Do tasks and Habitica todos Bidirectionally
+
     .PARAMETER WhatIf
 		Dry-Run the synchronization
 
@@ -28,6 +31,9 @@ function Sync-QuibbleTask {
         ConfirmImpact = 'Low'
     )]
     param (
+        [Parameter()]
+        [switch]
+        $Bidirectional
     )
     
     try {
