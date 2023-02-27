@@ -74,8 +74,10 @@ function Sync-QuibbleTask {
     
         foreach ($association in $associations) {
             $msTodoListTasks = Get-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id
+            Write-PSFMessage -Level SomewhatVerbose -Message "Microsoft To-Do List '$($association.MsTodoList.DisplayName)'"
             foreach ($msTodoListTask in $msTodoListTasks) {
                 if (-not $msTodoListTask.Recurrence.Pattern.Type) {
+                    Write-PSFMessage -Level SomewhatVerbose -Message "Microsoft To-Do '$($msTodoListTask.Title)' $($msTodoListTask.Status)"
                     if ($msTodoListTask.Status -eq 'completed') {
                         foreach ($hTodo in $hTodos) {
                             if ($hTodo.text -eq $msTodoListTask.Title) {
