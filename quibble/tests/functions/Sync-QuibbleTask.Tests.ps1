@@ -5,6 +5,10 @@ Describe 'Test Sync-QuibbleTask.ps1' {
             It 'Sync Task' {
                 Sync-QuibbleTask
             }
+
+            It 'Bidirectional Sync Task' {
+                Sync-QuibbleTask -Bidirectional
+            }
         }
     }
 }
