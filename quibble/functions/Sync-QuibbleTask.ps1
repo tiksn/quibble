@@ -73,17 +73,21 @@ function Sync-QuibbleTask {
         }
     
         foreach ($association in $associations) {
-            $msTodoListTasks = Get-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id
+            $msTodoListTasks = Get-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id -All
+            Write-PSFMessage -Level SomewhatVerbose -Message "Microsoft To-Do List '$($association.MsTodoList.DisplayName)'"
             foreach ($msTodoListTask in $msTodoListTasks) {
                 if (-not $msTodoListTask.Recurrence.Pattern.Type) {
+                    Write-PSFMessage -Level SomewhatVerbose -Message "Microsoft To-Do '$($msTodoListTask.Title)' $($msTodoListTask.Status)"
                     if ($msTodoListTask.Status -eq 'completed') {
                         foreach ($hTodo in $hTodos) {
                             if ($hTodo.text -eq $msTodoListTask.Title) {
+                                Write-PSFMessage -Level SomewhatVerbose -Message "Habitica To-Do '$($hTodo.text)' will be completed"
                                 if ($PSCmdlet.ShouldProcess(
                                         "Habitica To-Do '$($hTodo.text)' will be completed",
                                         $hTodo.text,
                                         'Complete')) {
                                     $hTodo | Complete-HabiticaTask
+                                    Write-PSFMessage -Level SomewhatVerbose -Message "Habitica To-Do '$($hTodo.text)' completed"
                                 }
                             }
                         }
@@ -99,11 +103,13 @@ function Sync-QuibbleTask {
                         $hTodo = $hTodos | Where-Object { $PSItem.text -eq $msTodoListTaskTitle }
                         $hCompletedTodo = $hCompletedTodos | Where-Object { $PSItem.text -eq $msTodoListTaskTitle }
                         if ((-not $hTodo) -and (-not $hCompletedTodo)) {
+                            Write-PSFMessage -Level SomewhatVerbose -Message "Habitica To-Do '$msTodoListTaskTitle' will be created"
                             if ($PSCmdlet.ShouldProcess(
                                     "Habitica To-Do '$($msTodoListTaskTitle)' will be created",
                                     $msTodoListTaskTitle,
                                     'Create')) {
                                 New-HabiticaTask -Type todo -Tags $association.HabiticaTag.id -Text $msTodoListTaskTitle -Notes $msTodoListTask.Body.Content
+                                Write-PSFMessage -Level SomewhatVerbose -Message "Habitica To-Do '$msTodoListTaskTitle' created"
                             }
                         }
                     }
