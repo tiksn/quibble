@@ -121,6 +121,34 @@ function Sync-QuibbleTask {
                     }
                 }
             }
+
+            if ($Bidirectional) {
+                Start-Sleep -Seconds 60
+                $msTodoListTasks = Get-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id -All
+                $hTodos = Get-HabiticaTask -Type todos
+                $hCompletedTodos = Get-HabiticaTask -Type completedTodos
+
+                $hTodos = $hTodos | Where-Object { $PSItem.tags -contains $association.HabiticaTag.id }
+                $hCompletedTodos = $hCompletedTodos | Where-Object { $PSItem.tags -contains $association.HabiticaTag.id }
+
+                foreach ($hTodo in $hTodos) {
+                    if (-not ($msTodoListTasks | Where-Object { $PSItem.Title -eq $hTodo.text })) {
+                        $hTodoText = $hTodo.text
+                        $hTodoNotes = $hTodo.notes
+                        Write-PSFMessage -Level SomewhatVerbose -Message "Microsoft To-Do '$hTodoText' will be created"
+                        if ($PSCmdlet.ShouldProcess(
+                                "Microsoft To-Do '$($hTodoText)' will be created",
+                                $hTodoText,
+                                'Create')) {
+                            $msTodoListTaskBody = [Microsoft.Graph.PowerShell.Models.MicrosoftGraphItemBody]::new()
+                            $msTodoListTaskBody.Content = $hTodoNotes
+                            $msTodoListTaskBody.ContentType = 'text'
+                            New-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id -Title $hTodoText -Body $msTodoListTaskBody
+                            Write-PSFMessage -Level SomewhatVerbose -Message "Microsoft To-Do '$hTodoText' created"
+                        }
+                    }
+                }
+            }
         }
     }
     catch {
