@@ -1,8 +1,14 @@
-﻿# Description
+﻿# quibble
 
-Insert a useful description for the quibble project here.
+Useful utility functions for maximizing benefit of [Microsoft Graph](https://graph.microsoft.com) and [Habitica](https://habitica.com/).
 
-Remember, it's the first thing a visitor will see.
+## Install Module
+
+Module can be installed from [PowerShell Gallery](https://www.powershellgallery.com/packages/quibble/)
+
+```PowerShell
+Install-Module -Name quibble
+```
 
 # Project Setup Instructions
 ## Working with the layout
