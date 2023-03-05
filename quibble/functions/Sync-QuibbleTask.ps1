@@ -35,7 +35,7 @@ function Sync-QuibbleTask {
         [switch]
         $Bidirectional
     )
-    
+
     try {
         $habiticaCredentialSecretName = Get-PSFConfigValue -FullName quibble.Secrets.HabiticaCredentialSecretName -NotNull
         [pscredential]$habiticaCredential = Get-Secret -Name $habiticaCredentialSecretName
@@ -51,20 +51,20 @@ function Sync-QuibbleTask {
         }
         Connect-Habitica -Credential $habiticaCredential
         $hUser = Get-HabiticaUser
-        Write-Information "Habitica user is $($hUser.profile.name)"
+        Write-PSFMessage -Level Important -Message "Habitica user is $($hUser.profile.name)"
 
         Connect-MgGraph -Scopes @('User.Read', 'Tasks.Read', 'Tasks.ReadWrite')
         $mgUser = Get-MgUser
-        Write-Information "Microsoft Graph user is $($mgUser.DisplayName)"   
-    
+        Write-PSFMessage -Level Important -Message "Microsoft Graph user is $($mgUser.DisplayName)"
+
         $msLists = Get-MgUserTodoList -UserId $mgUser.Id -All
-    
+
         $hTags = Get-HabiticaTag
         $hTodos = Get-HabiticaTask -Type todos
         $hCompletedTodos = Get-HabiticaTask -Type completedTodos
-    
+
         $associations = @()
-    
+
         foreach ($msList in $msLists) {
             if ($msList.IsOwner -and ($msList.WellknownListName -eq 'none')) {
                 foreach ($hTag in $hTags) {
@@ -77,45 +77,43 @@ function Sync-QuibbleTask {
                 }
             }
         }
-    
+
         foreach ($association in $associations) {
             $msTodoListTasks = Get-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id -All
-            Write-PSFMessage -Level SomewhatVerbose -Message "Microsoft To-Do List '$($association.MsTodoList.DisplayName)'"
+            Write-PSFMessage -Level SomewhatVerbose -Message "Microsoft To-Do List '$($association.MsTodoList.DisplayName)', Habitica Tag '$($association.HabiticaTag.name)'"
             foreach ($msTodoListTask in $msTodoListTasks) {
                 if (-not $msTodoListTask.Recurrence.Pattern.Type) {
                     Write-PSFMessage -Level SomewhatVerbose -Message "Microsoft To-Do '$($msTodoListTask.Title)' $($msTodoListTask.Status)"
                     if ($msTodoListTask.Status -eq 'completed') {
                         foreach ($hTodo in $hTodos) {
-                            if ($hTodo.text -eq $msTodoListTask.Title) {
+                            if (Compare-QuibbleAscii -Reference ($hTodo.text) -Difference ($msTodoListTask.Title)) {
                                 Write-PSFMessage -Level SomewhatVerbose -Message "Habitica To-Do '$($hTodo.text)' will be completed"
                                 if ($PSCmdlet.ShouldProcess(
                                         "Habitica To-Do '$($hTodo.text)' will be completed",
                                         $hTodo.text,
                                         'Complete')) {
-                                    $hTodo | Complete-HabiticaTask
-                                    Write-PSFMessage -Level SomewhatVerbose -Message "Habitica To-Do '$($hTodo.text)' completed"
+                                    $hTodo | Complete-HabiticaTask | Out-Null
+                                    Write-PSFMessage -Level Important -Message "Habitica To-Do '$($hTodo.text)' with Habitica Tag '$($association.HabiticaTag.name)' completed"
+                                    $hTodos = Get-HabiticaTask -Type todos
+                                    $hCompletedTodos = Get-HabiticaTask -Type completedTodos
                                 }
                             }
                         }
                     }
                     elseif ($msTodoListTask.Status -eq 'notStarted') {
-                        $msTodoListTaskTitle = $msTodoListTask.Title.Normalize([System.Text.NormalizationForm]::FormD)
-                        $msTodoListTaskTitle = $msTodoListTaskTitle.Replace("’", "'")
-                        $uni = [System.Text.Encoding]::Unicode.GetBytes($msTodoListTaskTitle)
-                        $ascii = [System.Text.Encoding]::ASCII.GetString($uni)
-                        $msTodoListTaskTitle = $ascii.Normalize([System.Text.NormalizationForm]::FormD)
-                        $msTodoListTaskTitle = $msTodoListTaskTitle.Replace("$([char]0x0000)", '')
-                        $msTodoListTaskTitle = $msTodoListTaskTitle.Replace('', '')
-                        $hTodo = $hTodos | Where-Object { $PSItem.text -eq $msTodoListTaskTitle }
-                        $hCompletedTodo = $hCompletedTodos | Where-Object { $PSItem.text -eq $msTodoListTaskTitle }
+                        $msTodoListTaskTitle = ConvertTo-QuibbleAscii -Source ($msTodoListTask.Title)
+                        $hTodo = $hTodos | Where-Object { Compare-QuibbleAscii -Reference ($PSItem.text) -Difference $msTodoListTaskTitle }
+                        $hCompletedTodo = $hCompletedTodos | Where-Object { Compare-QuibbleAscii -Reference ($PSItem.text) -Difference ($msTodoListTaskTitle) }
                         if ((-not $hTodo) -and (-not $hCompletedTodo)) {
                             Write-PSFMessage -Level SomewhatVerbose -Message "Habitica To-Do '$msTodoListTaskTitle' will be created"
                             if ($PSCmdlet.ShouldProcess(
                                     "Habitica To-Do '$($msTodoListTaskTitle)' will be created",
                                     $msTodoListTaskTitle,
                                     'Create')) {
-                                New-HabiticaTask -Type todo -Tags $association.HabiticaTag.id -Text $msTodoListTaskTitle -Notes $msTodoListTask.Body.Content
-                                Write-PSFMessage -Level SomewhatVerbose -Message "Habitica To-Do '$msTodoListTaskTitle' created"
+                                New-HabiticaTask -Type todo -Tags $association.HabiticaTag.id -Text $msTodoListTaskTitle -Notes $msTodoListTask.Body.Content | Out-Null
+                                Write-PSFMessage -Level Important -Message "Habitica To-Do '$($msTodoListTaskTitle)' with Habitica Tag '$($association.HabiticaTag.name)' created"
+                                $hTodos = Get-HabiticaTask -Type todos
+                                $hCompletedTodos = Get-HabiticaTask -Type completedTodos
                             }
                         }
                     }
@@ -126,13 +124,11 @@ function Sync-QuibbleTask {
                 Start-Sleep -Seconds 60
                 $msTodoListTasks = Get-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id -All
                 $hTodos = Get-HabiticaTask -Type todos
-                $hCompletedTodos = Get-HabiticaTask -Type completedTodos
 
-                $hTodos = $hTodos | Where-Object { $PSItem.tags -contains $association.HabiticaTag.id }
-                $hCompletedTodos = $hCompletedTodos | Where-Object { $PSItem.tags -contains $association.HabiticaTag.id }
+                $hCurrentTagTodos = $hTodos | Where-Object { $PSItem.tags -contains $association.HabiticaTag.id }
 
-                foreach ($hTodo in $hTodos) {
-                    if (-not ($msTodoListTasks | Where-Object { $PSItem.Title -eq $hTodo.text })) {
+                foreach ($hTodo in $hCurrentTagTodos) {
+                    if (-not ($msTodoListTasks | Where-Object { Compare-QuibbleAscii -Reference ($PSItem.Title) -Difference ($hTodo.text) })) {
                         $hTodoText = $hTodo.text
                         $hTodoNotes = $hTodo.notes
                         Write-PSFMessage -Level SomewhatVerbose -Message "Microsoft To-Do '$hTodoText' will be created"
@@ -143,8 +139,9 @@ function Sync-QuibbleTask {
                             $msTodoListTaskBody = [Microsoft.Graph.PowerShell.Models.MicrosoftGraphItemBody]::new()
                             $msTodoListTaskBody.Content = $hTodoNotes
                             $msTodoListTaskBody.ContentType = 'text'
-                            New-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id -Title $hTodoText -Body $msTodoListTaskBody
-                            Write-PSFMessage -Level SomewhatVerbose -Message "Microsoft To-Do '$hTodoText' created"
+                            New-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id -Title $hTodoText -Body $msTodoListTaskBody | Out-Null
+                            Write-PSFMessage -Level Important -Message "Microsoft To-Do '$($hTodoText)' in Microsoft To-Do List '$($association.MsTodoList.DisplayName)' created"
+                            $msTodoListTasks = Get-MgUserTodoListTask -TodoTaskListId $association.MsTodoList.Id -UserId $mgUser.Id -All
                         }
                     }
                 }
@@ -154,5 +151,4 @@ function Sync-QuibbleTask {
     catch {
         throw $_
     }
-    
 }
