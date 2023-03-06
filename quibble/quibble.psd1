@@ -3,7 +3,7 @@
 	RootModule        = 'quibble.psm1'
 	
 	# Version number of this module.
-	ModuleVersion     = '1.2.1'
+	ModuleVersion     = '1.2.2'
 	
 	# ID used to uniquely identify this module
 	GUID              = 'bf172dfc-3753-4f6f-bfe1-452a87cbaf4e'
@@ -27,8 +27,8 @@
 	# this module
 	RequiredModules   = @(
 		@{ ModuleName = 'PSFramework'; RequiredVersion = '1.7.270' },
-		@{ ModuleName = 'Microsoft.Graph.Authentication'; RequiredVersion = '1.22.0' },
-		@{ ModuleName = 'Microsoft.Graph.Users'; RequiredVersion = '1.22.0' },
+		@{ ModuleName = 'Microsoft.Graph.Authentication'; RequiredVersion = '1.23.0' },
+		@{ ModuleName = 'Microsoft.Graph.Users'; RequiredVersion = '1.23.0' },
 		@{ ModuleName = 'Microsoft.PowerShell.SecretManagement'; RequiredVersion = '1.1.2' },
 		@{ ModuleName = 'Habitica'; RequiredVersion = '1.2.0' }
 	)
