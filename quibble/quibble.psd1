@@ -3,7 +3,7 @@
 	RootModule        = 'quibble.psm1'
 	
 	# Version number of this module.
-	ModuleVersion     = '1.2.2'
+	ModuleVersion     = '1.3.0'
 	
 	# ID used to uniquely identify this module
 	GUID              = 'bf172dfc-3753-4f6f-bfe1-452a87cbaf4e'
