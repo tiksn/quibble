@@ -54,7 +54,8 @@ function Sync-QuibbleTask {
         Write-PSFMessage -Level Important -Message "Habitica user is $($hUser.profile.name)"
 
         Connect-MgGraph -Scopes @('User.Read', 'Tasks.Read', 'Tasks.ReadWrite')
-        $mgUser = Get-MgUser
+        $msContext = Get-MgContext
+        $mgUser = Get-MgUser -UserId $msContext.ClientId
         Write-PSFMessage -Level Important -Message "Microsoft Graph user is $($mgUser.DisplayName)"
 
         $msLists = Get-MgUserTodoList -UserId $mgUser.Id -All
